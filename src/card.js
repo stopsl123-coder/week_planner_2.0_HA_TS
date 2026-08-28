@@ -885,14 +885,12 @@ export class WeekPlannerCard extends LitElement {
     }
 
     _prepareEmbeddedCard(card, config) {
+        card.hass = this.hass;
+
         if (card.setConfig && typeof card.setConfig === 'function') {
             card.setConfig(config);
         } else {
             card.config = config;
-        }
-
-        if ('hass' in card || typeof card.hass !== 'undefined') {
-            card.hass = this.hass;
         }
 
         return card;

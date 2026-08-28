@@ -580,7 +580,7 @@ function e(e){return e&&e.__esModule?e.default:e}let t=globalThis,n=t.ShadowRoot
             <div class="custom-card-host">
                 ${this._renderCustomCardElement(t,n,i)}
             </div>
-        `}_renderCustomCardElement(e,t,n){const i=document.createElement(e);return i.style.display="block",i.style.width="100%",i.style.minHeight="240px",Object.entries(n).forEach(([e,t])=>{null!=t&&i.setAttribute(e,String(t))}),i.parentNode,i=this._prepareEmbeddedCard(i,t)}_prepareEmbeddedCard(e,t){return e.setConfig&&"function"==typeof e.setConfig?e.setConfig(t):e.config=t,("hass"in e||void 0!==e.hass)&&(e.hass=this.hass),e}_renderEventDetailsDialogHeading(){return j`
+        `}_renderCustomCardElement(e,t,n){const i=document.createElement(e);return i.style.display="block",i.style.width="100%",i.style.minHeight="240px",Object.entries(n).forEach(([e,t])=>{null!=t&&i.setAttribute(e,String(t))}),i.parentNode,i=this._prepareEmbeddedCard(i,t)}_prepareEmbeddedCard(e,t){return e.hass=this.hass,e.setConfig&&"function"==typeof e.setConfig?e.setConfig(t):e.config=t,e}_renderEventDetailsDialogHeading(){return j`
             <div class="header_title">
                 <span>${this._currentEventDetails.summary}</span>
                 <ha-icon-button
