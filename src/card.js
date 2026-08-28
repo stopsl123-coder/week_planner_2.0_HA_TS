@@ -91,6 +91,7 @@ export class WeekPlannerCard extends LitElement {
     _eventDetailsEntities;
     _eventDetailsWidgets;
     _widgetDefinitions;
+    _eventDetailCardUrl;
     _columns;
     _loader;
     _showNavigation;
@@ -206,6 +207,7 @@ export class WeekPlannerCard extends LitElement {
         this._eventDetailsEntities = Array.isArray(config.eventDetailsEntities) ? config.eventDetailsEntities : [];
         this._eventDetailsWidgets = Array.isArray(config.eventDetailsWidgets) ? config.eventDetailsWidgets : [];
         this._widgetDefinitions = Array.isArray(config.eventDetailsCustomCards) ? config.eventDetailsCustomCards : [];
+        this._eventDetailCardUrl = config.eventDetailCardUrl ?? null;
         this._columns = config.columns ?? {};
         this._maxEvents = config.maxEvents ?? false;
         this._maxDayEvents = config.maxDayEvents ?? false;
@@ -692,9 +694,21 @@ export class WeekPlannerCard extends LitElement {
                     ${this._renderEventDetailsEntities()}
                     ${this._renderEventDetailsWidgets()}
                     ${this._renderEventDetailsCustomCards()}
-                    ${this._renderEventDetailsCustomCards()}
+                    ${this._renderEventDetailCardLink()}
                 </div>
             </ha-dialog>
+        `;
+    }
+
+    _renderEventDetailCardLink() {
+        if (!this._eventDetailCardUrl) {
+            return html``;
+        }
+
+        return html`
+            <div class="event-detail-card-link">
+                <a href="${this._eventDetailCardUrl}" target="_blank" rel="noopener noreferrer">Open card</a>
+            </div>
         `;
     }
 
