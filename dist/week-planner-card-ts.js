@@ -580,7 +580,7 @@ function e(e){return e&&e.__esModule?e.default:e}let t=globalThis,n=t.ShadowRoot
             <div class="custom-card-host">
                 ${this._renderCustomCardElement(t,n,i)}
             </div>
-        `}_renderCustomCardElement(e,t,n){let i=document.createElement(e);return i.setConfig&&"function"==typeof i.setConfig?i.setConfig(t):i.config=t,Object.entries(n).forEach(([e,t])=>{null!=t&&i.setAttribute(e,String(t))}),i}_renderEventDetailsDialogHeading(){return j`
+        `}_renderCustomCardElement(e,t,n){let i=document.createElement(e);return i.setConfig&&"function"==typeof i.setConfig?i.setConfig(t):i.config=t,("hass"in i||void 0!==i.hass)&&(i.hass=this.hass),Object.entries(n).forEach(([e,t])=>{null!=t&&i.setAttribute(e,String(t))}),i}_renderEventDetailsDialogHeading(){return j`
             <div class="header_title">
                 <span>${this._currentEventDetails.summary}</span>
                 <ha-icon-button

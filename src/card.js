@@ -871,6 +871,10 @@ export class WeekPlannerCard extends LitElement {
             card.config = config;
         }
 
+        if ('hass' in card || typeof card.hass !== 'undefined') {
+            card.hass = this.hass;
+        }
+
         Object.entries(attrs).forEach(([key, value]) => {
             if (value !== undefined && value !== null) {
                 card.setAttribute(key, String(value));
