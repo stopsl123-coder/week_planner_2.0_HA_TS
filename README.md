@@ -73,6 +73,7 @@ Custom Home Assistant card displaying a responsive overview of multiple days wit
 | `texts`                  | object list      | {}                                                 | See [Texts](#texts)                                                                                                                         | Texts used in the card                                                                 | 1.0.0   |
 | `actions`                | object list      | {}                                                 | See [Actions](#actions)                                                                                                                     | Actions for click on card background                                                   | 1.8.0   |
 | `eventActions`           | object           | optional                                           | See [Actions](#actions)                                                                                                                     | Actions for click on event entry                                                       | 1.15.0  |
+| `eventDetailsEntities`   | object list      | optional                                           | JSON array of entities                                                                                                                      | Extra entities shown in event detail dialog                                            | 1.16.0  |
 | `weather`                | object           | optional                                           | See [Weather](#weather)                                                                                                                     | Configuration for optional weather forecast                                            | 1.1.0   |
 | `dayFormat`              | string           | optional                                           | See [Luxon format](https://moment.github.io/luxon/#/formatting?id=table-of-tokens)                                                          | Format of the date at the top of the day. This is not escaped, so HTML is allowed here | 1.6.0   |
 | `dateFormat`             | string           | `cccc d LLLL yyyy`                                 | See [Luxon format](https://moment.github.io/luxon/#/formatting?id=table-of-tokens)                                                          | Format of the date in event details                                                    | 1.0.0   |
@@ -149,6 +150,17 @@ eventActions:
 ```
 
 `url_path` is also accepted as alias for `navigation_path`.
+
+### Event detail entities
+You can add extra entities to the event detail dialog:
+
+```yaml
+eventDetailsEntities:
+  - entity: weather.forecast_home
+    name: Weather
+  - entity: sensor.pv_power
+    name: PV Power
+```
 
 ### Weather
 
@@ -385,4 +397,3 @@ texts:
   today:
   tomorrow:
 ```
-

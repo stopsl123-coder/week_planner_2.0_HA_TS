@@ -149,6 +149,7 @@ export class WeekPlannerCardEditor extends LitElement {
                         ${this.addTextField('eventActions.action', 'Event tap action type (e.g. url, navigate, more-info, none)')}
                         ${this.addTextField('eventActions.navigation_path', 'Event tap navigation path / URL')}
                         ${this.addTextField('eventActions.url_path', 'Event tap url_path (legacy alias)')}
+                        ${this.addTextField('eventDetailsEntities', 'Event detail entities (JSON array)')}
                     `
                 )}
                 ${this.addExpansionPanel(

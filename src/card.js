@@ -88,6 +88,7 @@ export class WeekPlannerCard extends LitElement {
     _legendToggle;
     _actions;
     _eventActions;
+    _eventDetailsEntities;
     _columns;
     _loader;
     _showNavigation;
@@ -200,6 +201,7 @@ export class WeekPlannerCard extends LitElement {
         this._legendToggle = config.legendToggle ?? false;
         this._actions = config.actions ?? false;
         this._eventActions = config.eventActions ?? config.event_actions ?? false;
+        this._eventDetailsEntities = Array.isArray(config.eventDetailsEntities) ? config.eventDetailsEntities : [];
         this._columns = config.columns ?? {};
         this._maxEvents = config.maxEvents ?? false;
         this._maxDayEvents = config.maxDayEvents ?? false;
@@ -651,6 +653,7 @@ export class WeekPlannerCard extends LitElement {
                 .heading="${this._renderEventDetailsDialogHeading()}"
             >
                 <div class="content">
+                    ${this._renderEventDetailsSummary()}
                     <div class="calendar">
                         <ha-icon icon="mdi:calendar-account"></ha-icon>
                         <div class="info">
@@ -682,8 +685,54 @@ export class WeekPlannerCard extends LitElement {
                         ` :
                         ''
                     }
+                    ${this._renderEventDetailsEntities()}
                 </div>
             </ha-dialog>
+        `;
+    }
+
+    _renderEventDetailsSummary() {
+        const details = this._currentEventDetails;
+        return html`
+            <div class="summary-grid">
+                <div><strong>Summary:</strong> ${details.summary ?? ''}</div>
+                <div><strong>Location:</strong> ${details.location ?? ''}</div>
+                <div><strong>Calendars:</strong> ${details.calendarNames?.join(', ') ?? ''}</div>
+                <div><strong>Start:</strong> ${details.originalStart?.toISO?.() ?? ''}</div>
+                <div><strong>End:</strong> ${details.originalEnd?.toISO?.() ?? ''}</div>
+                <div><strong>Full day:</strong> ${details.fullDay ? 'yes' : 'no'}</div>
+                ${details.url ? html`<div><strong>URL:</strong> <a href="${details.url}" target="_blank">${details.url}</a></div>` : ''}
+                ${details.description ? html`<div><strong>Description:</strong> ${unsafeHTML(details.description)}</div>` : ''}
+            </div>
+        `;
+    }
+
+    _renderEventDetailsEntities() {
+        if (!this._eventDetailsEntities?.length) {
+            return html``;
+        }
+
+        return html`
+            <div class="event-details-entities">
+                ${this._eventDetailsEntities.map((entry) => {
+                    const entityId = entry.entity ?? entry;
+                    const state = this.hass?.states?.[entityId];
+                    if (!entityId || !state) {
+                        return html``;
+                    }
+                    const name = entry.name ?? this.hass.formatEntityState?.(state) ?? state.attributes.friendly_name ?? entityId;
+                    const value = this.hass.formatEntityState(state) ?? state.state;
+                    return html`
+                        <div class="entity-row" @click="${() => this._fireMoreInfo(entityId)}">
+                            <ha-icon icon="${state.attributes.icon ?? 'mdi:circle'}"></ha-icon>
+                            <div class="info">
+                                <div class="name">${name}</div>
+                                <div class="value">${value}</div>
+                            </div>
+                        </div>
+                    `;
+                })}
+            </div>
         `;
     }
 
@@ -1241,6 +1290,12 @@ export class WeekPlannerCard extends LitElement {
 
     _closeDialog() {
         this._currentEventDetails = null;
+    }
+
+    _fireMoreInfo(entityId) {
+        const event = new Event('hass-more-info', { bubbles: true, composed: true });
+        event.detail = { entityId };
+        this.dispatchEvent(event);
     }
 
     _handleLegendClick(calendar) {
