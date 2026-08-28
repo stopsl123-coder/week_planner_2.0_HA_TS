@@ -1185,6 +1185,23 @@ export class WeekPlannerCard extends LitElement {
 
     _handleEventClick(event) {
         if (this._eventActions) {
+            const eventActionConfig = this._getEventActionConfig(event);
+            const action = eventActionConfig.action ?? null;
+
+            if (action === 'none') {
+                return;
+            }
+
+            if (action === 'url' || action === 'navigate') {
+                const targetUrl = eventActionConfig.navigation_path ?? eventActionConfig.url_path ?? null;
+                if (targetUrl) {
+                    window.open(targetUrl, '_blank', 'noopener,noreferrer');
+                    return;
+                }
+                this._currentEventDetails = event;
+                return;
+            }
+
             const actionEvent = new Event(
                 'hass-action', {
                     bubbles: true,
@@ -1192,7 +1209,7 @@ export class WeekPlannerCard extends LitElement {
                 }
             );
             actionEvent.detail = {
-                config: this._getEventActionConfig(event),
+                config: eventActionConfig,
                 action: 'tap',
             };
             this.dispatchEvent(actionEvent);
@@ -1208,6 +1225,9 @@ export class WeekPlannerCard extends LitElement {
         const baseConfig = this._eventActions && typeof this._eventActions === 'object' ? { ...this._eventActions } : {};
         if (baseConfig.url_path && !baseConfig.navigation_path) {
             baseConfig.navigation_path = baseConfig.url_path;
+        }
+        if (baseConfig.action === 'more-info' && !baseConfig.entity) {
+            baseConfig.entity = event?.calendars?.[0] ?? null;
         }
         if (
             (baseConfig.action === 'url' || baseConfig.action === 'navigate')
