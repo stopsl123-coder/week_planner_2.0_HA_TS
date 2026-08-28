@@ -864,6 +864,11 @@ export class WeekPlannerCard extends LitElement {
     }
 
     _renderCustomCardElement(tag, config, attrs) {
+        const host = document.createElement('div');
+        host.style.display = 'block';
+        host.style.width = '100%';
+        host.style.minHeight = '240px';
+
         const card = document.createElement(tag);
         card.style.display = 'block';
         card.style.width = '100%';
@@ -875,17 +880,17 @@ export class WeekPlannerCard extends LitElement {
             }
         });
 
-        if (card.parentNode === null) {
-            card = this._prepareEmbeddedCard(card, config);
-            return card;
-        }
-
-        card = this._prepareEmbeddedCard(card, config);
-        return card;
+        host.appendChild(card);
+        this._prepareEmbeddedCard(card, config);
+        return host;
     }
 
     _prepareEmbeddedCard(card, config) {
         card.hass = this.hass;
+
+        if (typeof card.connectedCallback === 'function') {
+            card.connectedCallback();
+        }
 
         if (card.setConfig && typeof card.setConfig === 'function') {
             card.setConfig(config);
