@@ -1,7 +1,7 @@
 {
-  "name": "Week planner card",
+  "name": "Week planner card ts",
   "content_in_root": false,
   "render_readme": true,
-  "filename": "week-planner-card.js",
+  "filename": "week-planner-card-ts.js",
   "homeassistant": "2023.9"
 }

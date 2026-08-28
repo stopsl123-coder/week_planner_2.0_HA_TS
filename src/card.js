@@ -102,7 +102,7 @@ export class WeekPlannerCard extends LitElement {
      */
     static getConfigElement() {
         // Create and return an editor element
-        return document.createElement("week-planner-card-editor");
+        return document.createElement("week-planner-card-ts-editor");
     }
 
     /**

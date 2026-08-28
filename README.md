@@ -28,18 +28,18 @@ Custom Home Assistant card displaying a responsive overview of multiple days wit
 ### HACS (Recommended)
 
 1. Make sure [HACS](https://hacs.xyz) is installed and working.
-2. Search for `week-planner-card`.
+2. Search for `week-planner-card-ts`.
 3. Download and install using HACS.
 
 ### Manual
 
-1. Download and copy `week-planner-card.js` from the [latest release](https://github.com/FamousWolf/week-planner-card/releases/latest) into your `config/www` directory.
+1. Download and copy `week-planner-card-ts.js` from the [latest release](https://github.com/FamousWolf/week-planner-card/releases/latest) into your `config/www` directory.
 2. Add the resource reference to Home Assistant configuration using one of these methods:
   - **Edit your configuration.yaml**
     Add:
     ```yaml
     resources:
-      - url: /local/week-planner-card.js?version=1.14.1
+      - url: /local/week-planner-card-ts.js?version=1.14.1
     type: module
     ```
   - **Using the graphical editor**
@@ -47,7 +47,7 @@ Custom Home Assistant card displaying a responsive overview of multiple days wit
     2. Navigate to "Settings" -> "Dashboards".
     3. Click on the 3 vertical dots in the top right corner and select "Resources".
     4. Click on the "Add resource" button in the bottom right corner.
-    5. Enter URL `/local/week-planner-card.js` and select type "JavaScript Module".
+    5. Enter URL `/local/week-planner-card-ts.js` and select type "JavaScript Module".
     6. Restart Home Assistant.
 
 
@@ -57,7 +57,7 @@ Custom Home Assistant card displaying a responsive overview of multiple days wit
 
 | Name                     | Type             | Default                                            | Supported options                                                                                                                           | Description                                                                            | Version |
 |--------------------------|------------------|----------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|---------|
-| `type`                   | string           | **Required**                                       | `custom:week-planner-card`                                                                                                                  | Type of the card                                                                       | 1.0.0   |
+| `type`                   | string           | **Required**                                       | `custom:week-planner-card-ts-ts`                                                                                                               | Type of the card                                                                       | 1.0.0   |
 | `title`                  | string           | optional                                           | Any string                                                                                                                                  | Card title                                                                             | 1.6.0   |
 | `days`                   | number \| string | 7                                                  | Any positive integer number \| `month`                                                                                                      | The number of days to show                                                             | 1.0.0   |
 | `maxEvents`              | number           | 0                                                  | Any positive integer number                                                                                                                 | The maximum number of events to show (0 is no maximum)                                 | 1.11.0  |
@@ -140,7 +140,7 @@ See [Actions documentation](https://www.home-assistant.io/dashboards/actions/). 
 For event entries, use `eventActions`:
 
 ```yaml
-type: custom:week-planner-card
+type: custom:week-planner-card-ts
 calendars:
   - entity: calendar.my_calendar_1
 eventActions:
@@ -254,7 +254,7 @@ Like with most cards, you can add custom styling to this card using [card_mod](h
 ### Minimal
 
 ```yaml
-type: custom:week-planner-card
+type: custom:week-planner-card-ts
 calendars:
   - entity: calendar.my_calendar_1
 ```
@@ -262,7 +262,7 @@ calendars:
 ### Extended
 
 ```yaml
-type: custom:week-planner-card
+type: custom:week-planner-card-ts
 calendars:
   - entity: calendar.my_calendar_1
     color: '#e6c229'
@@ -287,7 +287,7 @@ texts:
 ### Starting on Sunday
 
 ```yaml
-type: custom:week-planner-card
+type: custom:week-planner-card-ts
 calendars:
   - entity: calendar.my_calendar_1
     color: '#e6c229'
@@ -303,7 +303,7 @@ texts:
 ### Past events transparent with card_mod
 
 ```yaml
-type: custom:week-planner-card
+type: custom:week-planner-card-ts
 calendars:
   - entity: calendar.my_calendar_1
     color: '#e6c229'
@@ -319,7 +319,7 @@ card_mod:
 ### Highlight Today with card_mod
 
 ```yaml
-type: custom:week-planner-card
+type: custom:week-planner-card-ts
 calendars:
   - entity: calendar.my_calendar_1
     color: '#e6c229'
@@ -341,7 +341,7 @@ card_mod:
 This will style events with `Word1` as part of the title or `Word2` as the exact title with a red background.
 
 ```yaml
-type: custom:week-planner-card
+type: custom:week-planner-card-ts
 calendars:
   - entity: calendar.my_calendar_1
   - color: #e6c229
@@ -356,7 +356,7 @@ card_mod:
 ### Show entire current month
 
 ```yaml
-type: custom:week-planner-card
+type: custom:week-planner-card-ts
 calendars:
   - entity: calendar.my_calendar_1
 days: month
@@ -366,7 +366,7 @@ startingDay: month
 ### Show month with each day
 
 ```yaml
-type: custom:week-planner-card
+type: custom:week-planner-card-ts
 calendars:
   - calendar.my_calendar_1
 dayFormat: '''<span class="number">''d''</span> <span class="month">''MMMM''</span>'''
@@ -377,7 +377,7 @@ dayFormat: '''<span class="number">''d''</span> <span class="month">''MMMM''</sp
 This can not be done through the GUI editor, but has to be done in the YAML configuration.
 
 ```yaml
-type: custom:week-planner-card
+type: custom:week-planner-card-ts
 calendars:
   - entity: calendar.my_calendar_1
 texts:
@@ -385,3 +385,4 @@ texts:
   today:
   tomorrow:
 ```
+
