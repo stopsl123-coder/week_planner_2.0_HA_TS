@@ -89,6 +89,7 @@ export class WeekPlannerCard extends LitElement {
     _actions;
     _eventActions;
     _eventDetailsEntities;
+    _eventDetailsWidgets;
     _columns;
     _loader;
     _showNavigation;
@@ -202,6 +203,7 @@ export class WeekPlannerCard extends LitElement {
         this._actions = config.actions ?? false;
         this._eventActions = config.eventActions ?? config.event_actions ?? false;
         this._eventDetailsEntities = Array.isArray(config.eventDetailsEntities) ? config.eventDetailsEntities : [];
+        this._eventDetailsWidgets = Array.isArray(config.eventDetailsWidgets) ? config.eventDetailsWidgets : [];
         this._columns = config.columns ?? {};
         this._maxEvents = config.maxEvents ?? false;
         this._maxDayEvents = config.maxDayEvents ?? false;
@@ -686,6 +688,7 @@ export class WeekPlannerCard extends LitElement {
                         ''
                     }
                     ${this._renderEventDetailsEntities()}
+                    ${this._renderEventDetailsWidgets()}
                 </div>
             </ha-dialog>
         `;
@@ -732,6 +735,78 @@ export class WeekPlannerCard extends LitElement {
                         </div>
                     `;
                 })}
+            </div>
+        `;
+    }
+
+    _renderEventDetailsWidgets() {
+        if (!this._eventDetailsWidgets?.length) {
+            return html``;
+        }
+
+        return html`
+            <div class="event-details-widgets">
+                ${this._eventDetailsWidgets.map((widget) => {
+                    if (!widget || typeof widget !== 'object') {
+                        return html``;
+                    }
+
+                    if (widget.type === 'markdown') {
+                        return html`
+                            <div class="widget markdown">
+                                ${unsafeHTML(widget.content ?? '')}
+                            </div>
+                        `;
+                    }
+
+                    if (widget.type === 'entity') {
+                        return this._renderEventDetailWidgetEntity(widget);
+                    }
+
+                    if (widget.type === 'gauge') {
+                        return this._renderEventDetailWidgetGauge(widget);
+                    }
+
+                    return html``;
+                })}
+            </div>
+        `;
+    }
+
+    _renderEventDetailWidgetEntity(widget) {
+        const entityId = widget.entity;
+        const state = this.hass?.states?.[entityId];
+        if (!entityId || !state) {
+            return html``;
+        }
+
+        return html`
+            <div class="widget entity">
+                <div class="widget-header">${widget.name ?? state.attributes.friendly_name ?? entityId}</div>
+                <div class="widget-body">${this.hass.formatEntityState(state) ?? state.state}</div>
+            </div>
+        `;
+    }
+
+    _renderEventDetailWidgetGauge(widget) {
+        const entityId = widget.entity;
+        const state = this.hass?.states?.[entityId];
+        if (!entityId || !state) {
+            return html``;
+        }
+
+        const value = Number(state.state);
+        const min = Number(widget.min ?? 0);
+        const max = Number(widget.max ?? 100);
+        const pct = Number.isFinite(value) ? Math.max(0, Math.min(100, ((value - min) / (max - min)) * 100)) : 0;
+
+        return html`
+            <div class="widget gauge">
+                <div class="widget-header">${widget.name ?? state.attributes.friendly_name ?? entityId}</div>
+                <div class="gauge-bar">
+                    <div class="gauge-fill" style="width: ${pct}%"></div>
+                </div>
+                <div class="widget-body">${state.state}${state.attributes.unit_of_measurement ?? ''}</div>
             </div>
         `;
     }
