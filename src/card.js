@@ -865,6 +865,26 @@ export class WeekPlannerCard extends LitElement {
 
     _renderCustomCardElement(tag, config, attrs) {
         const card = document.createElement(tag);
+        card.style.display = 'block';
+        card.style.width = '100%';
+        card.style.minHeight = '240px';
+
+        Object.entries(attrs).forEach(([key, value]) => {
+            if (value !== undefined && value !== null) {
+                card.setAttribute(key, String(value));
+            }
+        });
+
+        if (card.parentNode === null) {
+            card = this._prepareEmbeddedCard(card, config);
+            return card;
+        }
+
+        card = this._prepareEmbeddedCard(card, config);
+        return card;
+    }
+
+    _prepareEmbeddedCard(card, config) {
         if (card.setConfig && typeof card.setConfig === 'function') {
             card.setConfig(config);
         } else {
@@ -874,12 +894,6 @@ export class WeekPlannerCard extends LitElement {
         if ('hass' in card || typeof card.hass !== 'undefined') {
             card.hass = this.hass;
         }
-
-        Object.entries(attrs).forEach(([key, value]) => {
-            if (value !== undefined && value !== null) {
-                card.setAttribute(key, String(value));
-            }
-        });
 
         return card;
     }
