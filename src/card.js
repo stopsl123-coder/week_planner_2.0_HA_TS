@@ -1241,6 +1241,11 @@ export class WeekPlannerCard extends LitElement {
                 return;
             }
 
+            if (action === 'more-info') {
+                this._currentEventDetails = event;
+                return;
+            }
+
             if (action === 'url' || action === 'navigate') {
                 const targetUrl = eventActionConfig.navigation_path ?? eventActionConfig.url_path ?? null;
                 if (targetUrl) {
