@@ -153,6 +153,7 @@ export class WeekPlannerCardEditor extends LitElement {
                         ${this.addTextField('eventDetailsWidgets', 'Event detail widgets (JSON array)')}
                         ${this.addTextField('eventDetailsCustomCards', 'Event detail custom cards (JSON array)')}
                         ${this.addTextField('eventDetailCardUrl', 'Event detail card URL')}
+                        ${this.addBooleanField('eventDetailsPopup', 'Open event detail as popup', true)}
                     `
                 )}
                 ${this.addExpansionPanel(

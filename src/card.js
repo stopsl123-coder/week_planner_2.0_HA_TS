@@ -92,6 +92,7 @@ export class WeekPlannerCard extends LitElement {
     _eventDetailsWidgets;
     _widgetDefinitions;
     _eventDetailCardUrl;
+    _eventDetailsPopup;
     _columns;
     _loader;
     _showNavigation;
@@ -208,6 +209,7 @@ export class WeekPlannerCard extends LitElement {
         this._eventDetailsWidgets = Array.isArray(config.eventDetailsWidgets) ? config.eventDetailsWidgets : [];
         this._widgetDefinitions = Array.isArray(config.eventDetailsCustomCards) ? config.eventDetailsCustomCards : [];
         this._eventDetailCardUrl = config.eventDetailCardUrl ?? null;
+        this._eventDetailsPopup = config.eventDetailsPopup ?? false;
         this._columns = config.columns ?? {};
         this._maxEvents = config.maxEvents ?? false;
         this._maxDayEvents = config.maxDayEvents ?? false;
@@ -1384,6 +1386,10 @@ export class WeekPlannerCard extends LitElement {
             }
 
             if (action === 'more-info') {
+                if (this._eventDetailsPopup) {
+                    this._currentEventDetails = event;
+                    return;
+                }
                 this._currentEventDetails = event;
                 return;
             }
