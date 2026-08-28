@@ -90,6 +90,7 @@ export class WeekPlannerCard extends LitElement {
     _eventActions;
     _eventDetailsEntities;
     _eventDetailsWidgets;
+    _widgetDefinitions;
     _columns;
     _loader;
     _showNavigation;
@@ -204,6 +205,7 @@ export class WeekPlannerCard extends LitElement {
         this._eventActions = config.eventActions ?? config.event_actions ?? false;
         this._eventDetailsEntities = Array.isArray(config.eventDetailsEntities) ? config.eventDetailsEntities : [];
         this._eventDetailsWidgets = Array.isArray(config.eventDetailsWidgets) ? config.eventDetailsWidgets : [];
+        this._widgetDefinitions = Array.isArray(config.eventDetailsCustomCards) ? config.eventDetailsCustomCards : [];
         this._columns = config.columns ?? {};
         this._maxEvents = config.maxEvents ?? false;
         this._maxDayEvents = config.maxDayEvents ?? false;
@@ -689,6 +691,8 @@ export class WeekPlannerCard extends LitElement {
                     }
                     ${this._renderEventDetailsEntities()}
                     ${this._renderEventDetailsWidgets()}
+                    ${this._renderEventDetailsCustomCards()}
+                    ${this._renderEventDetailsCustomCards()}
                 </div>
             </ha-dialog>
         `;
@@ -809,6 +813,55 @@ export class WeekPlannerCard extends LitElement {
                 <div class="widget-body">${state.state}${state.attributes.unit_of_measurement ?? ''}</div>
             </div>
         `;
+    }
+
+    _renderEventDetailsCustomCards() {
+        if (!this._widgetDefinitions?.length) {
+            return html``;
+        }
+
+        return html`
+            <div class="event-details-custom-cards">
+                ${this._widgetDefinitions.map((definition) => this._renderCustomCardDefinition(definition))}
+            </div>
+        `;
+    }
+
+    _renderCustomCardDefinition(definition) {
+        if (!definition || typeof definition !== 'object' || !definition.tag) {
+            return html``;
+        }
+
+        const tag = definition.tag;
+        const config = definition.config ?? {};
+        const attrs = definition.attrs ?? {};
+
+        if (!customElements.get(tag)) {
+            customElements.whenDefined(tag).catch(() => {});
+        }
+
+        return html`
+            <div class="custom-card-host">
+                ${this._renderCustomCardElement(tag, config, attrs)}
+            </div>
+        `;
+    }
+
+    _renderCustomCardElement(tag, config, attrs) {
+        const card = document.createElement(tag);
+        if (card.setConfig && typeof card.setConfig === 'function') {
+            card.setConfig(config);
+        } else {
+            card.config = config;
+        }
+
+        Object.entries(attrs).forEach(([key, value]) => {
+            if (value !== undefined && value !== null) {
+                card.setAttribute(key, String(value));
+            }
+        });
+
+        return card;
     }
 
     _renderEventDetailsDialogHeading() {
